@@ -1,0 +1,63 @@
+let userScore = 0;
+let botScore = 0;
+
+const choices = document.querySelectorAll(".choice");
+const msg = document.querySelector("#msg");
+
+const userScorePara = document.querySelector("#user-score");
+const botScorePara = document.querySelector("#bot-score");
+
+
+const genBotChoice = () => {
+     const options = ["rock","paper","scissors"];
+     const randIdx = Math.floor(Math.random() * 3);
+     return options[randIdx];
+};
+
+const drawGame = () => {
+    msg.innerText = "Game was Draw. Play again";
+    msg.style.backgroundcolor = "pink";
+};
+
+const showWinner = (userWin, userChoice, botchoice) => {
+    if(userWin) {
+        userScore++;
+        userScorePara.innerText = userScore;
+        msg.innerText = `You Win! your ${userChoice} beats ${userChoice}`;
+        msg.style.backgroundcolor = "green";
+    } else {
+        botScore++;
+        botScorePara.innerText = botScore;
+        msg.innerText = `You Lose ${botchoice} beats your ${userChoice}`;
+        msg.style.backgroundcolor = "red";
+    }
+};
+
+const playGame = (userChoice) => {
+    //generate bot choice-modular
+    const botchoice = genBotChoice();
+    if (userChoice === botchoice) {
+        //draw game
+        drawGame();
+    } else {
+        let userWin = true;
+        if (userChoice === "Rock") {
+            //scissor,paper
+           userWin = botchoice === "paper" ? false:true;
+        } else if (userChoice === "paper") {
+            //rock,scissor
+            userWin = botchoice === "scissors" ? false:true;
+        } else {
+            //rock,paper
+            userWin = botchoice === "Rock" ? false:true;
+        }
+        showWinner(userWin, userChoice, botchoice);
+    }
+};
+
+choices.forEach((choice) => {
+    choice.addEventListener("click", () => {
+        const userChoice = choice.getAttribute("id");
+    playGame(userChoice);
+ });
+});
